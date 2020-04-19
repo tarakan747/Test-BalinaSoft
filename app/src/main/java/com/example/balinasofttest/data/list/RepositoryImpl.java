@@ -18,7 +18,6 @@ import io.reactivex.Completable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 
@@ -43,13 +42,19 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public Completable uploadPhoto(PhotoTypeDtoOut p, File file) {
-        RequestBody requestBodyName = RequestBody.create(MediaType.parse("multipart/form-data"), p.getName());
-        RequestBody requestBodyFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("photo", file.getName(), requestBodyFile);
-        RequestBody requestBodyId = RequestBody.create(MediaType.parse("multipart/form-data"), p.getId().toString());
+    public Completable uploadPhoto(PhotoTypeDtoOut p, File file){
+        String mT = "multipart/form-data";
+        RequestBody requestName =
+                RequestBody.create(MediaType.parse(mT), p.getName());
+
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part image = MultipartBody.Part.createFormData("photo ", file.getName(), requestFile);
+
+        RequestBody requestId =
+                RequestBody.create(MediaType.parse(mT), p.getId() + "");
         return Completable.fromSingle(
-                api.uploadPhoto(requestBodyName, filePart, requestBodyId).doOnSuccess(this::success)
+                api.uploadPhoto(requestName, image, requestId).doOnSuccess(this::success)
         );
     }
 

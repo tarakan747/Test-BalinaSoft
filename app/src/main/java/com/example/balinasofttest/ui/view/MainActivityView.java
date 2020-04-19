@@ -13,16 +13,9 @@ import java.util.List;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface MainActivityView extends MvpView , MyAdapter.OnRowClickListener {
 
-    void showProgress();
-
-    void hideProgress();
-
-    @StateStrategyType(SingleStateStrategy.class)
     void showList(List<PhotoTypeDtoOut> list);
 
-    @StateStrategyType(SingleStateStrategy.class)
     void updateAdapter(List<PhotoTypeDtoOut> list);
 
-    @StateStrategyType(SingleStateStrategy.class)
     void showCamera(int position, PhotoTypeDtoOut p);
 }

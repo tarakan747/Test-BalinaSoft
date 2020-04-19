@@ -1,5 +1,7 @@
 package com.example.balinasofttest.ui.presenter;
 
+
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.example.balinasofttest.App;
@@ -9,13 +11,16 @@ import com.example.balinasofttest.di.list.ListModule;
 import com.example.balinasofttest.ui.view.MainActivityView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
 
 @InjectViewState
 public class ActivityPresenter extends MvpPresenter<MainActivityView> {
@@ -32,7 +37,6 @@ public class ActivityPresenter extends MvpPresenter<MainActivityView> {
 
     public void requestList() {
         if (repository.checkLastPage(numberPage)) {
-            getViewState().showProgress();
             disposable = repository.getPhotoType(numberPage)
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -42,9 +46,9 @@ public class ActivityPresenter extends MvpPresenter<MainActivityView> {
 
     public void requestUploadPhoto(PhotoTypeDtoOut p, File file) {
         disposable = repository.uploadPhoto(p,file)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
     }
 
 
@@ -58,7 +62,6 @@ public class ActivityPresenter extends MvpPresenter<MainActivityView> {
     }
 
     public void onSuccess() {
-        getViewState().hideProgress();
         if (numberPage == 0)
             getViewState().showList(getList());
         else

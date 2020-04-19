@@ -62,8 +62,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public void add(List<PhotoTypeDtoOut> p) {
         int x = getItemCount();
-        list.addAll(x, p);
-        notifyItemRangeInserted(x, p.size());
+        if (!this.list.containsAll(p)) {
+            list.addAll(x, p);
+            notifyItemRangeInserted(x, p.size());
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
