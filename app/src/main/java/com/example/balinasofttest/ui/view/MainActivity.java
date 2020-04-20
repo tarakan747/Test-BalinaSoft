@@ -1,36 +1,27 @@
 package com.example.balinasofttest.ui.view;
-
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
-
-
+import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.balinasofttest.R;
 import com.example.balinasofttest.data.dto.PhotoTypeDtoOut;
 import com.example.balinasofttest.ui.presenter.ActivityPresenter;
 import com.example.balinasofttest.ui.view.adapter.MyAdapter;
-
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.List;
 
 
@@ -42,6 +33,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     private static final int CAMERA_REQUEST = 1888;
     RecyclerView recyclerView;
+    ProgressBar bar;
     MyAdapter myAdapter;
     LinearLayoutManager manager;
     boolean isScrolling = false;
@@ -52,6 +44,7 @@ public class MainActivity extends MvpAppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        bar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.list);
         presenter.requestList();
     }
@@ -64,6 +57,7 @@ public class MainActivity extends MvpAppCompatActivity implements
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setVisibility(View.VISIBLE);
+        bar.setVisibility(View.GONE);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -125,6 +119,17 @@ public class MainActivity extends MvpAppCompatActivity implements
         }
     }
 
+    @Override
+    public void showError(String error) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(error)
+                .setCancelable(false)
+                .setPositiveButton("OK",null)
+                .create();
+        alertDialog.show();
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -143,27 +148,8 @@ public class MainActivity extends MvpAppCompatActivity implements
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap photo = (Bitmap) extras.get("data");
-            uploadPhoto(photo);
+            presenter.requestUploadPhoto(p, photo);
         }
 
-    }
-
-    private void uploadPhoto(Bitmap photo) {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root);
-        myDir.mkdirs();
-        String fname = "Image-" + "image_name" + ".jpg";
-        File file = new File(myDir, fname);
-        if (file.exists()) file.delete();
-        Log.i("TAG", root + fname);
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            photo.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        presenter.requestUploadPhoto(p, file);
     }
 }

@@ -1,11 +1,7 @@
 package com.example.balinasofttest.data.list;
-
 import com.example.balinasofttest.data.dto.PhotoTypeDtoOut;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
-
 import io.reactivex.Completable;
 
 public interface Repository {

@@ -1,24 +1,14 @@
 package com.example.balinasofttest.data.list;
-
-
-import android.util.Log;
-
 import com.example.balinasofttest.data.dto.PageDto;
-import com.example.balinasofttest.data.dto.PhotoDtoOut;
 import com.example.balinasofttest.data.dto.PhotoTypeDtoOut;
 import com.example.balinasofttest.data.provider.web.Api;
-
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-
 import io.reactivex.Completable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Response;
 
 
 public class RepositoryImpl implements Repository {
@@ -42,7 +32,7 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public Completable uploadPhoto(PhotoTypeDtoOut p, File file){
+    public Completable uploadPhoto(PhotoTypeDtoOut p, File file) {
         String mT = "multipart/form-data";
         RequestBody requestName =
                 RequestBody.create(MediaType.parse(mT), p.getName());
@@ -53,13 +43,15 @@ public class RepositoryImpl implements Repository {
 
         RequestBody requestId =
                 RequestBody.create(MediaType.parse(mT), p.getId() + "");
-        return Completable.fromSingle(
-                api.uploadPhoto(requestName, image, requestId).doOnSuccess(this::success)
-        );
-    }
 
-    private void success(Response<PhotoDtoOut> response) {
-        Log.d("MY_TAG", "success: " + response.body());
+        Completable completable = Completable.fromSingle(
+                api.uploadPhoto(requestName, image, requestId));
+        if (completable == Completable.complete()) {
+            return Completable.complete();
+        } else {
+            file.delete();
+            return Completable.error(new Throwable("Не удалось загрузить фотографию, проверьте интернет!"));
+        }
     }
 
     @Override

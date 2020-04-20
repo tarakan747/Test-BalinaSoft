@@ -1,19 +1,14 @@
 package com.example.balinasofttest.ui.view.adapter;
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.balinasofttest.R;
 import com.example.balinasofttest.data.dto.PhotoTypeDtoOut;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,6 @@
 package com.example.balinasofttest.di.list;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
 import javax.inject.Scope;
 
 @Scope

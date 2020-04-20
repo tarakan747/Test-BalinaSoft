@@ -1,15 +1,10 @@
 package com.example.balinasofttest.di.app;
-
 import android.content.Context;
-
-
+import com.example.balinasofttest.BuildConfig;
 import com.example.balinasofttest.data.provider.web.Api;
 import com.google.gson.Gson;
-
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -46,8 +41,8 @@ public class AppModule {
 
         return new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
                 .build();
     }
 
@@ -55,7 +50,7 @@ public class AppModule {
     @Singleton
     Retrofit provideRetrofit(OkHttpClient client) {
         return new Retrofit.Builder()
-                .baseUrl("https://junior.balinasoft.com/")
+                .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)

@@ -1,7 +1,5 @@
 package com.example.balinasofttest;
-
 import android.app.Application;
-
 import com.example.balinasofttest.di.app.AppComponent;
 import com.example.balinasofttest.di.app.AppModule;
 import com.example.balinasofttest.di.app.DaggerAppComponent;
