@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
@@ -22,6 +24,9 @@ import com.example.balinasofttest.R;
 import com.example.balinasofttest.data.dto.PhotoTypeDtoOut;
 import com.example.balinasofttest.ui.presenter.ActivityPresenter;
 import com.example.balinasofttest.ui.view.adapter.MyAdapter;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 
@@ -150,6 +155,5 @@ public class MainActivity extends MvpAppCompatActivity implements
             Bitmap photo = (Bitmap) extras.get("data");
             presenter.requestUploadPhoto(p, photo);
         }
-
     }
 }

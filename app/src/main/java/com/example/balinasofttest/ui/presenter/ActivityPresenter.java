@@ -41,13 +41,12 @@ public class ActivityPresenter extends MvpPresenter<MainActivityView> {
     }
 
     private File bitMapToFile(Bitmap bm) {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root);
+        File myDir = Environment.getExternalStorageDirectory();
+        myDir = new File(myDir.getAbsolutePath()+"/.temp/");
         myDir.mkdirs();
         String fname = "Image-" + "image_name" + ".jpg";
-        File file = new File(myDir, fname);
+        File file = myDir;
         if (file.exists()) file.delete();
-        Log.i("TAG", root + fname);
         try {
             FileOutputStream out = new FileOutputStream(file);
             bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
@@ -64,10 +63,13 @@ public class ActivityPresenter extends MvpPresenter<MainActivityView> {
         disposable = repository.uploadPhoto(p, file)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> file.delete(), (throwable) ->{
-                    file.delete();
+                .subscribe(this::drrr, (throwable) ->{
                     onError(throwable);
                 });
+    }
+
+    private void drrr(){
+        return;
     }
 
     private void onError(Throwable throwable) {
