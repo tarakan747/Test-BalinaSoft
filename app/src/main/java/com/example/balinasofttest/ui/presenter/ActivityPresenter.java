@@ -64,7 +64,10 @@ public class ActivityPresenter extends MvpPresenter<MainActivityView> {
         disposable = repository.uploadPhoto(p, file)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> file.delete(), this::onError);
+                .subscribe(() -> file.delete(), (throwable) ->{
+                    file.delete();
+                    onError(throwable);
+                });
     }
 
     private void onError(Throwable throwable) {

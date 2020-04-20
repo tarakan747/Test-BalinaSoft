@@ -44,15 +44,10 @@ public class RepositoryImpl implements Repository {
         RequestBody requestId =
                 RequestBody.create(MediaType.parse(mT), p.getId() + "");
 
-        Completable completable = Completable.fromSingle(
+         return Completable.fromSingle(
                 api.uploadPhoto(requestName, image, requestId));
-        if (completable == Completable.complete()) {
-            return Completable.complete();
-        } else {
-            file.delete();
-            return Completable.error(new Throwable("Не удалось загрузить фотографию, проверьте интернет!"));
-        }
     }
+
 
     @Override
     public List<PhotoTypeDtoOut> getList() {
