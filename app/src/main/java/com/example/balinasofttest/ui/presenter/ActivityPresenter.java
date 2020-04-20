@@ -71,7 +71,7 @@ public class ActivityPresenter extends MvpPresenter<MainActivityView> {
     }
 
     private void onError(Throwable throwable) {
-        getViewState().showError(throwable.getMessage());
+        getViewState().showError("Не удалось загрузить фотографию, проверьте интернет!");
     }
 
     private void thatAll(Throwable throwable) {
